@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Miswaak Azaan</title>
+    <link rel="icon" href="assets/favicon.ico">
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <header class="topbar">
+        <div class="brand">
+          <img class="brand-logo" src="../../assets/logo.png" alt="Miswaak Azaan logo" />
+          <div class="brand-copy">
+            <p class="eyebrow" id="sourceLabel">Prayer schedule</p>
+            <h1 id="locationTitle">Miswaak Azaan</h1>
+          </div>
+        </div>
+        <div class="actions">
+          <button class="test-button" id="testAzaanButton" type="button" aria-pressed="false">Test Azaan</button>
+          <button class="icon-button" id="refreshButton" title="Refresh" aria-label="Refresh"><img class="button-icon" src="../../assets/icons/refresh.svg" alt="" aria-hidden="true" /></button>
+          <button class="icon-button" id="settingsButton" title="Settings" aria-label="Settings"><img class="button-icon" src="../../assets/icons/settings.svg" alt="" aria-hidden="true" /></button>
+        </div>
+      </header>
+
+      <section class="focus-panel">
+        <div>
+          <p class="label">Next</p>
+          <h2 id="nextPrayer">--</h2>
+          <p id="nextPrayerTime" class="next-time">--:--</p>
+          <p class="azaan-status" id="azaanStatusLabel">Azaan scheduler starting</p>
+        </div>
+        <div class="meta-grid">
+          
+          <div>
+            <span>Current time</span>
+            <strong id="currentTimeLabel">--:--:--</strong>
+          </div>
+          <div>
+            <span>Date</span>
+            <strong id="dateLabel">--</strong>
+          </div>
+          <div>
+            <span>Method</span>
+            <strong id="methodLabel">--</strong>
+          </div>
+          <div>
+            <span>Timezone</span>
+            <strong id="timezoneLabel">--</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="status hidden" id="statusBox"></section>
+
+      <section class="times-grid" id="timesGrid" aria-live="polite"></section>
+      <footer class="app-footer">
+        <button class="footer-link" id="miswaakLink" type="button">Powered by Miswaak &bull; https://miswaakofficial.com</button>
+        <span>Version 1.0.0 &bull; April 2026</span>
+        <span>Prayer times powered by Aladhan API</span>
+      </footer>
+    </main>
+
+    <dialog id="settingsDialog" class="settings-dialog">
+      <form id="settingsForm" method="dialog">
+        <header class="dialog-header">
+          <h2>Settings</h2>
+          <button class="icon-button" value="cancel" title="Close" aria-label="Close"><span class="icon close-icon" aria-hidden="true"></span></button>
+        </header>
+
+        <div class="form-grid">
+          <label>
+            <span>City</span>
+            <input name="city" autocomplete="address-level2" required />
+          </label>
+          <label>
+            <span>Country</span>
+            <input name="country" autocomplete="country-name" required />
+          </label>
+          <label>
+            <span>Latitude</span>
+            <input name="latitude" inputmode="decimal" placeholder="35.6762" />
+          </label>
+          <label>
+            <span>Longitude</span>
+            <input name="longitude" inputmode="decimal" placeholder="139.6503" />
+          </label>
+          <label>
+            <span>Timezone</span>
+            <input name="timezone" placeholder="Auto-filled after city lookup" />
+          </label>
+          <div class="location-tools">
+            <button type="button" class="secondary" id="resolveLocationButton">Resolve City</button>
+            <button type="button" class="secondary" id="detectLocationButton">Auto-detect</button>
+            <p id="locationHelp" class="field-note">City lookup saves latitude, longitude, and timezone for accurate offline fallback.</p>
+          </div>
+          <label>
+            <span>Method</span>
+            <select name="calculationMethod">
+              <option value="MuslimWorldLeague">Muslim World League</option>
+              <option value="Egyptian">Egyptian</option>
+              <option value="Karachi">Karachi</option>
+              <option value="UmmAlQura">Umm al-Qura</option>
+              <option value="Dubai">Dubai</option>
+              <option value="Qatar">Qatar</option>
+              <option value="Kuwait">Kuwait</option>
+              <option value="Singapore">Singapore</option>
+              <option value="Turkey">Turkey</option>
+              <option value="Tehran">Tehran</option>
+              <option value="NorthAmerica">North America</option>
+            </select>
+          </label>
+          <label>
+            <span>Madhab</span>
+            <select name="madhab">
+              <option value="Shafi">Shafi</option>
+              <option value="Hanafi">Hanafi</option>
+            </select>
+          </label>
+          <label class="toggle-row">
+            <input name="useApiFirst" type="checkbox" />
+            <span>Use API first</span>
+          </label>
+        </div>
+
+        <footer class="dialog-actions">
+          <button type="button" class="secondary" id="diagnosticsButton">Diagnostics</button>
+          <button type="submit" class="primary">Save</button>
+        </footer>
+      </form>
+    </dialog>
+
+    <script src="renderer.js"></script>
+  </body>
+</html>
+
