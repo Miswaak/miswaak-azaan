@@ -9,7 +9,7 @@ A simple desktop app that plays Azaan based on your location.
 - Clean desktop UI
 
 ## 🚀 Download
-Coming soon...
+https://github.com/Miswaak/miswaak-azaan/releases
 
 ## 🌐 Website
 https://miswaakofficial.com
