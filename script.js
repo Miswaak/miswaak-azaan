@@ -1,4 +1,26 @@
 (() => {
+  // ---------- Clean tracking params from shared links ----------
+  try {
+    const url = new URL(window.location.href);
+    let changed = false;
+    const removeExact = ['fbclid', 'gclid', 'igshid', 'mc_cid', 'mc_eid'];
+    for (const key of removeExact) {
+      if (url.searchParams.has(key)) {
+        url.searchParams.delete(key);
+        changed = true;
+      }
+    }
+    for (const key of Array.from(url.searchParams.keys())) {
+      if (key.startsWith('utm_')) {
+        url.searchParams.delete(key);
+        changed = true;
+      }
+    }
+    if (changed) {
+      const cleanUrl = `${url.pathname}${url.search}${url.hash}`;
+      window.history.replaceState(null, '', cleanUrl);
+    }
+  } catch (_) {}
   // ---------- Sticky nav scroll state ----------
   const nav = document.getElementById('nav');
   const onScroll = () => {
