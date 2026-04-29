@@ -1,12 +1,22 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Miswaak Azaan — Never miss a prayer</title>
 <meta name="description" content="A quiet desktop companion that plays the Azaan at the right time, wherever you are. Free, open source, MIT licensed." />
-<meta name="theme-color" content="#0A0E1A" />
+<meta name="theme-color" content="#F8F4EA" />
 <link rel="icon" href="favicon.ico" />
+<script>
+  (function () {
+    try {
+      var t = localStorage.getItem('miswaak-theme');
+      if (t === 'dark' || t === 'light') {
+        document.documentElement.setAttribute('data-theme', t);
+      }
+    } catch (_) {}
+  })();
+</script>
 <meta property="og:title" content="Miswaak Azaan — Never miss a prayer" />
 <meta property="og:description" content="A quiet desktop companion that plays the Azaan at the right time, wherever you are." />
 <meta property="og:type" content="website" />
@@ -41,6 +51,15 @@
       <a href="#features">Features</a>
       <a href="#preview">Preview</a>
       <a href="#contribute">Contribute</a>
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="4.2"/>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+        </svg>
+      </button>
       <a class="nav-cta" href="https://github.com/Miswaak/miswaak-azaan" target="_blank" rel="noopener">GitHub</a>
     </nav>
   </div>
@@ -159,19 +178,19 @@
           <div class="device-left">
             <p class="muted small">Today &middot; <span id="device-city">Worldwide</span></p>
             <p class="next-label">Next Azaan</p>
-            <p class="next-name">Asr</p>
-            <p class="next-count">02 : 14 : 30</p>
+            <p class="next-name" id="next-name">Asr</p>
+            <p class="next-count" id="next-count">02 : 14 : 30</p>
             <button class="device-play" type="button" aria-hidden="true" tabindex="-1">
               <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"/></svg>
               Test Azaan
             </button>
           </div>
-          <ul class="device-list">
-            <li><span>Fajr</span><span>05:12</span></li>
-            <li><span>Dhuhr</span><span>12:31</span></li>
-            <li class="active"><span>Asr</span><span>15:48</span></li>
-            <li><span>Maghrib</span><span>18:24</span></li>
-            <li><span>Isha</span><span>19:42</span></li>
+          <ul class="device-list" id="device-list">
+            <li data-prayer="Fajr"><span>Fajr</span><span>05:12</span></li>
+            <li data-prayer="Dhuhr"><span>Dhuhr</span><span>12:31</span></li>
+            <li data-prayer="Asr" class="active"><span>Asr</span><span>15:48</span></li>
+            <li data-prayer="Maghrib"><span>Maghrib</span><span>18:24</span></li>
+            <li data-prayer="Isha"><span>Isha</span><span>19:42</span></li>
           </ul>
         </div>
       </div>
