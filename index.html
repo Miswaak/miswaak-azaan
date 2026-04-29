@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Miswaak Azaan — Never miss a prayer</title>
+<meta name="description" content="A quiet desktop companion that plays the Azaan at the right time, wherever you are. Free, open source, MIT licensed." />
+<meta name="theme-color" content="#0A0E1A" />
+<link rel="icon" href="favicon.ico" />
+<meta property="og:title" content="Miswaak Azaan — Never miss a prayer" />
+<meta property="og:description" content="A quiet desktop companion that plays the Azaan at the right time, wherever you are." />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="logo.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- Decorative star watermark, fixed behind hero -->
+<svg class="star-watermark" viewBox="0 0 200 200" aria-hidden="true">
+  <defs>
+    <g id="eight-star">
+      <polygon points="100,10 122,78 190,78 135,118 156,186 100,146 44,186 65,118 10,78 78,78"
+               fill="none" stroke="currentColor" stroke-width="0.6"/>
+      <polygon points="100,10 122,78 190,78 135,118 156,186 100,146 44,186 65,118 10,78 78,78"
+               fill="none" stroke="currentColor" stroke-width="0.6" transform="rotate(22.5 100 100)"/>
+    </g>
+  </defs>
+  <use href="#eight-star"/>
+</svg>
+
+<header class="nav" id="nav">
+  <div class="nav-inner">
+    <a class="brand" href="#top" aria-label="Miswaak Azaan home">
+      <img src="logo.png" alt="" width="32" height="32" />
+      <span class="brand-name">Miswaak Azaan</span>
+    </a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#features">Features</a>
+      <a href="#preview">Preview</a>
+      <a href="#contribute">Contribute</a>
+      <a class="nav-cta" href="https://github.com/Miswaak/miswaak-azaan" target="_blank" rel="noopener">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-inner">
+      <img class="hero-logo" src="logo.png" alt="Miswaak Azaan logo" width="80" height="80" />
+      <p class="eyebrow">Miswaak Azaan</p>
+      <h1>Never miss a prayer.</h1>
+      <p class="lede">A quiet desktop companion that plays the Azaan at the right time &mdash; wherever you are.</p>
+
+      <div class="cta-row">
+        <a class="btn btn-primary"
+           href="https://github.com/Miswaak/miswaak-azaan/releases/download/v1.0.0/Miswaak.Azaan.Setup.1.0.0.exe">
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Download for Windows &middot; v1.0.0
+        </a>
+        <a class="btn btn-ghost" href="https://github.com/Miswaak/miswaak-azaan" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="currentColor">
+            <path d="M12 .5C5.73.5.5 5.73.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56 0-.28-.01-1.01-.02-1.99-3.2.7-3.87-1.54-3.87-1.54-.52-1.32-1.27-1.67-1.27-1.67-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.75 2.69 1.24 3.34.95.1-.74.4-1.24.72-1.53-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.18-3.1-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.05 11.05 0 0 1 5.78 0c2.21-1.49 3.18-1.18 3.18-1.18.62 1.59.23 2.76.11 3.05.74.81 1.18 1.84 1.18 3.1 0 4.43-2.7 5.41-5.27 5.69.41.36.78 1.06.78 2.14 0 1.55-.01 2.8-.01 3.18 0 .31.21.67.8.55C20.21 21.39 23.5 17.08 23.5 12 23.5 5.73 18.27.5 12 .5z"/>
+          </svg>
+          View on GitHub
+        </a>
+      </div>
+
+      <p class="cta-meta">Free &middot; MIT Licensed &middot; ~78 MB</p>
+
+      <aside class="warning" id="warning" role="note">
+        <div>
+          <strong>Heads up:</strong> Windows may show a SmartScreen warning because this build is unsigned. Click <em>&ldquo;More info&rdquo;</em> &rarr; <em>&ldquo;Run anyway&rdquo;</em>. It&rsquo;s safe.
+        </div>
+        <button class="warning-close" type="button" aria-label="Dismiss">&times;</button>
+      </aside>
+    </div>
+  </section>
+
+  <hr class="dotted-arch" aria-hidden="true" />
+
+  <!-- FEATURES -->
+  <section class="section" id="features">
+    <header class="section-head">
+      <h2>Made for stillness, not noise.</h2>
+      <p>Set it once, then forget about it. Miswaak Azaan stays out of your way until the moment matters.</p>
+    </header>
+
+    <div class="feature-grid">
+      <article class="feature">
+        <div class="feature-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+          </svg>
+        </div>
+        <h3>Global prayer times</h3>
+        <p>Pick your city. Accurate timings powered by Aladhan, with an offline fallback so you&rsquo;re never caught out.</p>
+      </article>
+
+      <article class="feature">
+        <div class="feature-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+        </div>
+        <h3>Automatic Azaan</h3>
+        <p>The Azaan plays at every prayer time without you lifting a finger. Quiet hours and volume are yours to control.</p>
+      </article>
+
+      <article class="feature">
+        <div class="feature-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="6 4 20 12 6 20 6 4"/>
+          </svg>
+        </div>
+        <h3>One&#8209;tap test</h3>
+        <p>Hear the Azaan on demand to check your speakers, volume, or just the comfort of the call.</p>
+      </article>
+
+      <article class="feature">
+        <div class="feature-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2l2.39 7.36H22l-6.2 4.5L18.18 22 12 17.5 5.82 22l2.39-8.14L2 9.36h7.61z"/>
+          </svg>
+        </div>
+        <h3>Calm, focused UI</h3>
+        <p>Nothing flashy. Just today&rsquo;s prayers, the next one ahead, and the time until you hear it.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- PREVIEW (stylized SVG mockup) -->
+  <section class="section preview" id="preview">
+    <header class="section-head">
+      <h2>A glimpse of the app.</h2>
+      <p>Designed to fade into your desktop until the call rises.</p>
+    </header>
+
+    <div class="device">
+      <div class="device-glow" aria-hidden="true"></div>
+      <div class="device-frame" role="img" aria-label="Miswaak Azaan app window preview">
+        <div class="device-bar">
+          <span class="dot dot-r"></span>
+          <span class="dot dot-y"></span>
+          <span class="dot dot-g"></span>
+          <span class="device-title">Miswaak Azaan</span>
+        </div>
+        <div class="device-body">
+          <div class="device-left">
+            <p class="muted small">Today &middot; Chennai, IN</p>
+            <p class="next-label">Next Azaan</p>
+            <p class="next-name">Asr</p>
+            <p class="next-count">02 : 14 : 30</p>
+            <button class="device-play" type="button" aria-hidden="true" tabindex="-1">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"/></svg>
+              Test Azaan
+            </button>
+          </div>
+          <ul class="device-list">
+            <li><span>Fajr</span><span>05:12</span></li>
+            <li><span>Dhuhr</span><span>12:31</span></li>
+            <li class="active"><span>Asr</span><span>15:48</span></li>
+            <li><span>Maghrib</span><span>18:24</span></li>
+            <li><span>Isha</span><span>19:42</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <p class="device-caption">Illustrative preview. The real app uses the same calm hierarchy.</p>
+  </section>
+
+  <hr class="dotted-arch" aria-hidden="true" />
+
+  <!-- CONTRIBUTE -->
+  <section class="section contribute" id="contribute">
+    <header class="section-head">
+      <h2>Built by the community.</h2>
+      <p>Miswaak Azaan is open source and MIT licensed. Issues, ideas, and pull requests are warmly welcome &mdash; especially around translations, additional adhan recitations, and macOS / Linux support.</p>
+    </header>
+
+    <div class="contrib-row">
+      <a class="btn btn-ghost" href="https://github.com/Miswaak/miswaak-azaan" target="_blank" rel="noopener">Star on GitHub</a>
+      <a class="btn btn-ghost" href="https://github.com/Miswaak/miswaak-azaan/issues" target="_blank" rel="noopener">Open an Issue</a>
+      <a class="btn btn-ghost" href="https://github.com/Miswaak/miswaak-azaan#readme" target="_blank" rel="noopener">Read the README</a>
+      <a class="btn btn-ghost" href="https://github.com/Miswaak/miswaak-azaan/pulls" target="_blank" rel="noopener">Pull Requests</a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <p>Made with care by <strong>Rayhan</strong> and contributors.</p>
+    <p class="muted small">v1.0.0 &middot; MIT License &middot; <a href="https://miswaakofficial.com" target="_blank" rel="noopener">miswaakofficial.com</a></p>
+  </div>
+</footer>
+
+<script src="script.js" defer></script>
+</body>
+</html>
