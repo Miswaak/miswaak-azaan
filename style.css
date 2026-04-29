@@ -1,10 +1,10 @@
 /* ---------- Themes ---------- */
 :root,
 [data-theme="light"] {
-  --bg-0: #F8F4EA;
-  --bg-1: #F1E9D5;
+  --bg-0: #FFFDF7;
+  --bg-1: #F7F0E0;
   --surface: #FFFFFF;
-  --surface-2: #FBF7EC;
+  --surface-2: #FFFAF0;
   --border: rgba(11, 46, 38, 0.12);
   --border-strong: rgba(11, 46, 38, 0.28);
   --gold: #A88339;
@@ -17,41 +17,41 @@
   --device-bg-2: #FAF5E7;
   --device-bar-bg: rgba(0, 0, 0, 0.04);
   --device-pill-bg: rgba(0, 0, 0, 0.04);
-  --hero-glow-1: rgba(168, 131, 57, 0.16);
-  --hero-glow-2: rgba(168, 131, 57, 0.07);
-  --star-opacity: 0.07;
+  --hero-glow-1: rgba(168, 131, 57, 0.10);
+  --hero-glow-2: rgba(168, 131, 57, 0.05);
+  --star-opacity: 0.05;
   --primary-text: #1A1207;
   --shadow: 0 30px 80px -28px rgba(11, 46, 38, 0.25);
-  --nav-bg: rgba(248, 244, 234, 0.65);
-  --nav-bg-scrolled: rgba(248, 244, 234, 0.92);
+  --nav-bg: rgba(255, 253, 247, 0.72);
+  --nav-bg-scrolled: rgba(255, 253, 247, 0.94);
   --code-bg: rgba(0, 0, 0, 0.06);
 }
 
 [data-theme="dark"] {
-  --bg-0: #0A0E1A;
-  --bg-1: #101A2E;
-  --surface: #13192A;
-  --surface-2: #182039;
+  --bg-0: #24283A;
+  --bg-1: #303143;
+  --surface: #363747;
+  --surface-2: #404151;
   --border: rgba(201, 168, 107, 0.15);
   --border-strong: rgba(201, 168, 107, 0.32);
   --gold: #C9A86B;
   --gold-soft: #E0C58A;
   --gold-glow: rgba(201, 168, 107, 0.18);
-  --text: #E8E6DF;
-  --muted: #9AA3B2;
+  --text: #F5F1E8;
+  --muted: #C7C0B2;
   --warning-bg: rgba(201, 168, 107, 0.08);
-  --device-bg-1: #161D33;
-  --device-bg-2: #0F1424;
-  --device-bar-bg: rgba(0, 0, 0, 0.25);
-  --device-pill-bg: rgba(255, 255, 255, 0.05);
-  --hero-glow-1: rgba(201, 168, 107, 0.10);
-  --hero-glow-2: rgba(201, 168, 107, 0.05);
-  --star-opacity: 0.06;
+  --device-bg-1: #3A3C4C;
+  --device-bg-2: #2C2F40;
+  --device-bar-bg: rgba(255, 255, 255, 0.06);
+  --device-pill-bg: rgba(255, 255, 255, 0.08);
+  --hero-glow-1: rgba(201, 168, 107, 0.13);
+  --hero-glow-2: rgba(201, 168, 107, 0.07);
+  --star-opacity: 0.07;
   --primary-text: #1A1207;
-  --shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.6);
-  --nav-bg: rgba(10, 14, 26, 0.55);
-  --nav-bg-scrolled: rgba(10, 14, 26, 0.85);
-  --code-bg: rgba(255, 255, 255, 0.05);
+  --shadow: 0 30px 80px -24px rgba(0, 0, 0, 0.42);
+  --nav-bg: rgba(36, 40, 58, 0.66);
+  --nav-bg-scrolled: rgba(36, 40, 58, 0.9);
+  --code-bg: rgba(255, 255, 255, 0.08);
 }
 
 /* ---------- Base ---------- */

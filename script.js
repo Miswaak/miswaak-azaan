@@ -25,7 +25,7 @@
   const toggle = document.getElementById('theme-toggle');
   const setMeta = (theme) => {
     const meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.setAttribute('content', theme === 'dark' ? '#0A0E1A' : '#F8F4EA');
+    if (meta) meta.setAttribute('content', theme === 'dark' ? '#24283A' : '#FFFDF7');
   };
   setMeta(document.documentElement.getAttribute('data-theme') || 'light');
   toggle?.addEventListener('click', () => {
