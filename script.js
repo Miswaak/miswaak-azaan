@@ -16,6 +16,13 @@
     try { localStorage.setItem('miswaak-warning-dismissed', '1'); } catch (_) {}
   });
 
+  try {
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const city = tz && tz.includes('/') ? tz.split('/').pop().replace(/_/g, ' ') : null;
+    const el = document.getElementById('device-city');
+    if (city && el) el.textContent = city;
+  } catch (_) { /* keep fallback */ }
+
   document.querySelectorAll('a[href^="#"]').forEach(a => {
     a.addEventListener('click', e => {
       const id = a.getAttribute('href').slice(1);
