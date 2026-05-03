@@ -29,5 +29,24 @@ To install:
 
 This is safe for this community release.
 
+## Windows code signing
+
+Windows builds are signing-ready, but they require a real Authenticode code-signing certificate.
+
+Before creating a signed release, set:
+
+- `CSC_LINK`: path to a `.pfx` / `.p12` certificate file, or a base64-encoded certificate
+- `CSC_KEY_PASSWORD`: certificate password
+
+Then run:
+
+```powershell
+npm run dist:signed
+```
+
+If Windows reports `Cannot create symbolic link` while electron-builder downloads `winCodeSign`, run the build from an elevated terminal or enable Windows Developer Mode. Unsigned community builds can still be created with `npm run dist`.
+
+Do not commit certificate files or passwords. Certificate file extensions are ignored by `.gitignore`.
+
 ## 🌐 Website
 https://miswaakofficial.com

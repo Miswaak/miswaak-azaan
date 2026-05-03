@@ -4,3 +4,9 @@ dist/
 *.log
 .env
 .DS_Store
+*.pfx
+*.p12
+*.pem
+*.key
+*.cer
+*.crt

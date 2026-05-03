@@ -10,7 +10,8 @@
                     "start":  "electron .",
                     "lint":  "eslint .",
                     "pack":  "electron-builder --dir",
-                    "dist":  "electron-builder --win nsis"
+                    "dist":  "electron-builder --win nsis",
+                    "dist:signed":  "electron-builder --win nsis --publish never -c.win.signAndEditExecutable=true"
                 },
     "dependencies":  {
                          "adhan":  "4.4.3"
