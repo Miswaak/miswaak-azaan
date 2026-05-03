@@ -6,7 +6,7 @@ contextBridge.exposeInMainWorld("azaan", {
   getPrayerTimes: () => ipcRenderer.invoke("app:getPrayerTimes"),
   resolveLocation: (locationInput) => ipcRenderer.invoke("app:resolveLocation", locationInput),
   detectLocation: () => ipcRenderer.invoke("app:detectLocation"),
-  getAzaanAudioUrl: () => ipcRenderer.invoke("app:getAzaanAudioUrl"),
+  getAzaanAudioUrl: (prayerKey) => ipcRenderer.invoke("app:getAzaanAudioUrl", prayerKey),
   getDiagnostics: () => ipcRenderer.invoke("app:getDiagnostics"),
   openPath: (targetPath) => ipcRenderer.invoke("app:openPath", targetPath),
   openExternal: (url) => ipcRenderer.invoke("app:openExternal", url)

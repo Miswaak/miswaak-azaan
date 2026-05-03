@@ -33,8 +33,9 @@ function createWindow() {
   mainWindow.loadFile(path.join(__dirname, "..", "renderer", "index.html"));
 }
 
-function getDefaultAzaanAudioUrl() {
-  const audioPath = path.join(app.getAppPath(), "assets", "default-azaan.ogg");
+function getAzaanAudioUrl(prayerKey = "default") {
+  const audioFile = prayerKey === "fajr" ? "default-azaan.ogg" : "rayhan-azaan.m4a";
+  const audioPath = path.join(app.getAppPath(), "assets", audioFile);
   return pathToFileURL(audioPath).toString();
 }
 
@@ -64,13 +65,14 @@ function registerIpc() {
     return getPrayerTimes(config, logger);
   });
 
-  ipcMain.handle("app:getAzaanAudioUrl", () => getDefaultAzaanAudioUrl());
+  ipcMain.handle("app:getAzaanAudioUrl", (_event, prayerKey) => getAzaanAudioUrl(prayerKey));
 
   ipcMain.handle("app:getDiagnostics", () => ({
     configPath: configStore.configPath,
     logFile: logger.logFile,
     version: app.getVersion(),
-    azaanAudioUrl: getDefaultAzaanAudioUrl()
+    azaanAudioUrl: getAzaanAudioUrl("default"),
+    fajrAzaanAudioUrl: getAzaanAudioUrl("fajr")
   }));
 
   ipcMain.handle("app:openExternal", async (_event, url) => {

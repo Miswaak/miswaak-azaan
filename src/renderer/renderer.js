@@ -6,13 +6,16 @@ const PRAYERS = [
   ["maghrib", "Maghrib"],
   ["isha", "Isha"]
 ];
+const AZAAN_PRAYERS = new Set(["fajr", "dhuhr", "asr", "maghrib", "isha"]);
+const TEST_AZAAN_PRAYER = "dhuhr";
 
 const state = {
   config: null,
   prayerData: null,
   refreshTimer: null,
   clockTimer: null,
-  azaanAudio: null,
+  azaanAudioByPrayer: new Map(),
+  currentAzaanAudio: null,
   isAzaanPlaying: false,
   notifiedPrayerKeys: new Set()
 };
@@ -286,35 +289,41 @@ async function maybeAutoDetectDefaultLocation() {
     showStatus(`Using Tokyo fallback. Auto-detect failed: ${error.message || "unknown error"}. Open Settings to choose your city.`);
   }
 }
-async function getAzaanAudio() {
-  if (!state.azaanAudio) {
-    const audioUrl = await window.azaan.getAzaanAudioUrl();
-    state.azaanAudio = new Audio(audioUrl);
-    state.azaanAudio.preload = "auto";
-    state.azaanAudio.addEventListener("ended", () => {
+async function getAzaanAudio(prayerKey = TEST_AZAAN_PRAYER) {
+  if (!state.azaanAudioByPrayer.has(prayerKey)) {
+    const audioUrl = await window.azaan.getAzaanAudioUrl(prayerKey);
+    const audio = new Audio(audioUrl);
+    audio.preload = "auto";
+    audio.addEventListener("ended", () => {
       setAzaanPlaying(false);
       elements.azaanStatusLabel.textContent = formatPrayerStatus();
     });
-    state.azaanAudio.addEventListener("pause", () => {
-      if (state.azaanAudio.currentTime >= state.azaanAudio.duration || state.azaanAudio.currentTime === 0) {
+    audio.addEventListener("pause", () => {
+      if (audio.currentTime >= audio.duration || audio.currentTime === 0) {
         setAzaanPlaying(false);
       }
     });
+    state.azaanAudioByPrayer.set(prayerKey, audio);
   }
-  return state.azaanAudio;
+  return state.azaanAudioByPrayer.get(prayerKey);
 }
 
-async function playAzaanAudio(reason) {
-  const audio = await getAzaanAudio();
+async function playAzaanAudio(reason, prayerKey = TEST_AZAAN_PRAYER) {
+  if (state.currentAzaanAudio) {
+    state.currentAzaanAudio.pause();
+    state.currentAzaanAudio.currentTime = 0;
+  }
+  const audio = await getAzaanAudio(prayerKey);
   audio.pause();
   audio.currentTime = 0;
+  state.currentAzaanAudio = audio;
   await audio.play();
   setAzaanPlaying(true);
   showStatus(reason);
 }
 
 async function toggleAzaanAudio() {
-  const audio = await getAzaanAudio();
+  const audio = state.currentAzaanAudio || await getAzaanAudio(TEST_AZAAN_PRAYER);
 
   if (state.isAzaanPlaying) {
     audio.pause();
@@ -326,7 +335,7 @@ async function toggleAzaanAudio() {
 
   elements.testAzaanButton.disabled = true;
   try {
-    await playAzaanAudio("Playing test Azaan audio.");
+    await playAzaanAudio("Playing test Azaan audio.", TEST_AZAAN_PRAYER);
   } catch (error) {
     setAzaanPlaying(false);
     showStatus(error.message || "Unable to play Azaan audio.", true);
@@ -342,13 +351,16 @@ async function checkPrayerTriggers() {
 
   const { dateKey, timeKey } = getLocationDateParts();
   for (const [key, label] of PRAYERS) {
+    if (!AZAAN_PRAYERS.has(key)) {
+      continue;
+    }
     const prayerTime = state.prayerData.timings[key];
     const triggerKey = `${dateKey}-${key}-${prayerTime}`;
     if (prayerTime === timeKey && !state.notifiedPrayerKeys.has(triggerKey)) {
       state.notifiedPrayerKeys.add(triggerKey);
       elements.azaanStatusLabel.textContent = `Azaan playing for ${label}`;
       try {
-        await playAzaanAudio(`Azaan playing for ${label} (${prayerTime}).`);
+        await playAzaanAudio(`Azaan playing for ${label} (${prayerTime}).`, key);
       } catch (error) {
         elements.azaanStatusLabel.textContent = `Azaan could not play for ${label}`;
         showStatus(error.message || `Unable to play Azaan for ${label}.`, true);
