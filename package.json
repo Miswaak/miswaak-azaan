@@ -1,47 +1,47 @@
 {
-    "name":  "miswaak-azaan",
-    "version":  "1.0.0",
-    "description":  "Production-ready desktop prayer time app with Aladhan API and adhan offline fallback.",
-    "main":  "src/main/main.js",
-    "author":  "Rayhan",
-    "license":  "MIT",
-    "private":  true,
-    "scripts":  {
-                    "start":  "electron .",
-                    "lint":  "eslint .",
-                    "pack":  "electron-builder --dir",
-                    "dist":  "electron-builder --win nsis",
-                    "dist:signed":  "electron-builder --win nsis --publish never -c.win.signAndEditExecutable=true"
-                },
-    "dependencies":  {
-                         "adhan":  "4.4.3"
-                     },
-    "devDependencies":  {
-                            "@eslint/js":  "^9.25.1",
-                            "electron":  "^30.5.1",
-                            "electron-builder":  "^24.13.3",
-                            "eslint":  "^9.25.1"
-                        },
-    "build":  {
-                  "appId":  "com.miswaak.azaan.desktop",
-                  "productName":  "Miswaak Azaan",
-                  "directories":  {
-                                      "output":  "release"
-                                  },
-                  "files":  [
-                                "src/**/*",
-                                "assets/**/*",
-                                "config/**/*",
-                                "package.json"
-                            ],
-                  "win":  {
-                              "target":  "nsis",
-                              "signAndEditExecutable":  false,
-                              "icon":  "assets/icon.ico"
-                          },
-                  "nsis":  {
-                               "oneClick":  false,
-                               "allowToChangeInstallationDirectory":  true
-                           }
-              }
+  "name": "miswaak-azaan",
+  "version": "1.0.1",
+  "description": "Production-ready desktop prayer time app with Aladhan API and adhan offline fallback.",
+  "main": "src/main/main.js",
+  "author": "Rayhan",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "lint": "eslint .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder --win nsis",
+    "dist:signed": "electron-builder --win nsis --publish never -c.win.signAndEditExecutable=true"
+  },
+  "dependencies": {
+    "adhan": "4.4.3"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.25.1",
+    "electron": "^30.5.1",
+    "electron-builder": "^24.13.3",
+    "eslint": "^9.25.1"
+  },
+  "build": {
+    "appId": "com.miswaak.azaan.desktop",
+    "productName": "Miswaak Azaan",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "src/**/*",
+      "assets/**/*",
+      "config/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": "nsis",
+      "signAndEditExecutable": false,
+      "icon": "assets/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  }
 }
