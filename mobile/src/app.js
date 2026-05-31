@@ -9,7 +9,7 @@ const PRAYERS = [
 
 const METHOD_ID = 3;
 const APP_PLATFORM = "android";
-const APP_VERSION_CODE = 4;
+const APP_VERSION_CODE = 5;
 const UPDATE_MANIFEST_URL = "https://miswaak.github.io/miswaak-azaan/downloads/latest.json";
 const KAABA = {
   latitude: 21.422487,
@@ -106,7 +106,7 @@ function renderQibla() {
 
   const bearing = calculateQiblaBearing(latitude, longitude);
   const rounded = Math.round(bearing);
-  elements.qiblaBearing.textContent = `${rounded}° ${compassLabel(bearing)}`;
+  elements.qiblaBearing.textContent = `${rounded} deg ${compassLabel(bearing)}`;
   elements.qiblaLabel.textContent = "Direction from your current location.";
   elements.qiblaArrow.style.transform = `translate(-50%, -88%) rotate(${bearing}deg)`;
 }
