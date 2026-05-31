@@ -255,6 +255,16 @@ p { margin: 0 0 1em; color: var(--muted); }
   box-shadow: 0 8px 28px -10px var(--gold-glow), inset 0 1px 0 rgba(255,255,255,0.25);
 }
 .btn-primary:hover { transform: translateY(-1px); color: var(--primary-text); }
+.btn-android {
+  background: #0F7A53;
+  color: #FFFFFF;
+  box-shadow: 0 8px 28px -12px rgba(15, 122, 83, 0.42);
+}
+.btn-android:hover {
+  transform: translateY(-1px);
+  color: #FFFFFF;
+  background: #0B5F41;
+}
 .btn-ghost {
   background: transparent;
   color: var(--text);

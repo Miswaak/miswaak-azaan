@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Miswaak Azaan</string>
+    <string name="title_activity_main">Miswaak Azaan</string>
+    <string name="package_name">com.miswaak.azaan.mobile</string>
+    <string name="custom_url_scheme">com.miswaak.azaan.mobile</string>
+</resources>

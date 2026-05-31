@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Miswaak Azaan</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <div class="brand">
+          <img src="./assets/logo.png" alt="Miswaak Azaan" />
+          <div>
+            <h1>Miswaak Azaan</h1>
+            <p id="locationLabel">Tokyo, Japan</p>
+          </div>
+        </div>
+        <button class="icon-button" id="refreshButton" type="button" aria-label="Refresh prayer times">
+          <span aria-hidden="true">↻</span>
+        </button>
+      </header>
+
+      <section class="update-banner" id="updateBanner" hidden>
+        <div>
+          <strong>Update available</strong>
+          <p id="updateMessage">A newer version of Miswaak Azaan is ready.</p>
+        </div>
+        <button class="update-button" id="updateButton" type="button">Update</button>
+      </section>
+
+      <section class="hero-panel">
+        <p class="eyebrow">Next prayer</p>
+        <div class="next-prayer">
+          <div>
+            <h2 id="nextPrayerName">--</h2>
+            <p id="nextPrayerTime">--:--</p>
+          </div>
+          <div class="countdown" id="countdownLabel">--</div>
+        </div>
+      </section>
+
+      <section class="actions">
+        <button class="primary-action" id="testAzaanButton" type="button">Test Azaan</button>
+        <button class="secondary-action" id="locationButton" type="button">Use Location</button>
+      </section>
+
+      <section class="prayer-list" id="prayerList" aria-label="Prayer times"></section>
+
+      <section class="settings-panel">
+        <label>
+          City
+          <input id="cityInput" type="text" value="Tokyo" autocomplete="address-level2" />
+        </label>
+        <label>
+          Country
+          <input id="countryInput" type="text" value="Japan" autocomplete="country-name" />
+        </label>
+        <button class="secondary-action" id="saveLocationButton" type="button">Save</button>
+      </section>
+
+      <p class="status" id="statusLabel">Ready</p>
+    </main>
+
+    <audio id="azaanAudio" src="./assets/rayhan-azaan.m4a" preload="auto"></audio>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

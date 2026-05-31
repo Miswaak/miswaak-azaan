@@ -1,0 +1,15 @@
+{
+  "appId": "com.miswaak.azaan.mobile",
+  "appName": "Miswaak Azaan",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "https"
+  },
+  "plugins": {
+    "LocalNotifications": {
+      "smallIcon": "ic_stat_miswaak_azaan",
+      "iconColor": "#0f7a53",
+      "sound": "rayhan_azaan.m4a"
+    }
+  }
+}
