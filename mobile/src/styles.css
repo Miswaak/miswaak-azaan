@@ -260,6 +260,18 @@ select {
   color: var(--text);
 }
 
+.official-link {
+  justify-self: center;
+  color: var(--brand-strong);
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.official-link:active {
+  color: var(--brand);
+}
+
 .status {
   min-height: 20px;
   margin: 14px 2px 0;

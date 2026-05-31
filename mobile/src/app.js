@@ -9,7 +9,7 @@ const PRAYERS = [
 
 const METHOD_ID = 3;
 const APP_PLATFORM = "android";
-const APP_VERSION_CODE = 2;
+const APP_VERSION_CODE = 3;
 const UPDATE_MANIFEST_URL = "https://miswaak.github.io/miswaak-azaan/downloads/latest.json";
 
 const state = {
