@@ -9,8 +9,12 @@ const PRAYERS = [
 
 const METHOD_ID = 3;
 const APP_PLATFORM = "android";
-const APP_VERSION_CODE = 3;
+const APP_VERSION_CODE = 4;
 const UPDATE_MANIFEST_URL = "https://miswaak.github.io/miswaak-azaan/downloads/latest.json";
+const KAABA = {
+  latitude: 21.422487,
+  longitude: 39.826206
+};
 
 const state = {
   timings: null,
@@ -31,6 +35,9 @@ const elements = {
   nextPrayerName: document.querySelector("#nextPrayerName"),
   nextPrayerTime: document.querySelector("#nextPrayerTime"),
   countdownLabel: document.querySelector("#countdownLabel"),
+  qiblaBearing: document.querySelector("#qiblaBearing"),
+  qiblaLabel: document.querySelector("#qiblaLabel"),
+  qiblaArrow: document.querySelector("#qiblaArrow"),
   prayerList: document.querySelector("#prayerList"),
   statusLabel: document.querySelector("#statusLabel"),
   cityInput: document.querySelector("#cityInput"),
@@ -60,6 +67,48 @@ function setAzaanPlaying(isPlaying) {
 
 function stripTimeZoneSuffix(value) {
   return String(value).replace(/\s*\([^)]*\)\s*$/, "").trim();
+}
+
+function toRadians(degrees) {
+  return degrees * Math.PI / 180;
+}
+
+function toDegrees(radians) {
+  return radians * 180 / Math.PI;
+}
+
+function normalizeDegrees(degrees) {
+  return (degrees + 360) % 360;
+}
+
+function calculateQiblaBearing(latitude, longitude) {
+  const userLatitude = toRadians(latitude);
+  const kaabaLatitude = toRadians(KAABA.latitude);
+  const longitudeDelta = toRadians(KAABA.longitude - longitude);
+  const y = Math.sin(longitudeDelta);
+  const x = Math.cos(userLatitude) * Math.tan(kaabaLatitude) - Math.sin(userLatitude) * Math.cos(longitudeDelta);
+  return normalizeDegrees(toDegrees(Math.atan2(y, x)));
+}
+
+function compassLabel(degrees) {
+  const labels = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
+  return labels[Math.round(degrees / 45) % labels.length];
+}
+
+function renderQibla() {
+  const { latitude, longitude } = state.location;
+  if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) {
+    elements.qiblaBearing.textContent = "--";
+    elements.qiblaLabel.textContent = "Use location for Qibla direction.";
+    elements.qiblaArrow.style.transform = "translate(-50%, -88%) rotate(0deg)";
+    return;
+  }
+
+  const bearing = calculateQiblaBearing(latitude, longitude);
+  const rounded = Math.round(bearing);
+  elements.qiblaBearing.textContent = `${rounded}° ${compassLabel(bearing)}`;
+  elements.qiblaLabel.textContent = "Direction from your current location.";
+  elements.qiblaArrow.style.transform = `translate(-50%, -88%) rotate(${bearing}deg)`;
 }
 
 function formatDate(date) {
@@ -120,6 +169,7 @@ function renderPrayerTimes() {
   elements.cityInput.value = state.location.city;
   elements.countryInput.value = state.location.country;
   elements.madhabSelect.value = String(state.school);
+  renderQibla();
 
   if (!state.timings || !state.nextPrayer) {
     elements.prayerList.innerHTML = "";
@@ -199,6 +249,7 @@ async function useDeviceLocation() {
     localStorage.setItem("miswaak.longitude", String(state.location.longitude));
     localStorage.setItem("miswaak.city", state.location.city);
     localStorage.setItem("miswaak.country", state.location.country);
+    renderQibla();
     await refreshPrayerTimes();
   }, () => {
     setStatus("Location permission was not granted.", true);
@@ -328,5 +379,6 @@ function bindEvents() {
 
 bindEvents();
 renderPrayerTimes();
+renderQibla();
 refreshPrayerTimes();
 checkForUpdates();

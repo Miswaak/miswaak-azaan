@@ -5,9 +5,9 @@
     "url": "https://miswaak.github.io/miswaak-azaan/downloads/Miswaak.Azaan.Setup.1.0.2.exe"
   },
   "android": {
-    "versionName": "1.0.2-beta",
-    "versionCode": 3,
-    "url": "https://miswaak.github.io/miswaak-azaan/downloads/Miswaak.Azaan.Android.1.0.2-beta.apk",
+    "versionName": "1.0.3-beta",
+    "versionCode": 4,
+    "url": "https://miswaak.github.io/miswaak-azaan/downloads/Miswaak.Azaan.Android.1.0.3-beta.apk",
     "playStoreUrl": ""
   }
 }
