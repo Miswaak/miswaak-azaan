@@ -14,8 +14,8 @@
 ## Versioning
 
 - Android package: `com.miswaak.azaan.mobile`
-- First Android version name: `1.0.0`
-- First Android version code: `1`
+- Current Android beta version name: `1.0.1-beta`
+- Current Android beta version code: `2`
 
 For every future Android release:
 

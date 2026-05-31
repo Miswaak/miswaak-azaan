@@ -8,9 +8,8 @@ const PRAYERS = [
 ];
 
 const METHOD_ID = 3;
-const SCHOOL_ID = 0;
 const APP_PLATFORM = "android";
-const APP_VERSION_CODE = 1;
+const APP_VERSION_CODE = 2;
 const UPDATE_MANIFEST_URL = "https://miswaak.github.io/miswaak-azaan/downloads/latest.json";
 
 const state = {
@@ -22,6 +21,7 @@ const state = {
     latitude: Number(localStorage.getItem("miswaak.latitude")) || null,
     longitude: Number(localStorage.getItem("miswaak.longitude")) || null
   },
+  school: localStorage.getItem("miswaak.school") === "1" ? 1 : 0,
   countdownTimer: null,
   isAzaanPlaying: false
 };
@@ -35,6 +35,7 @@ const elements = {
   statusLabel: document.querySelector("#statusLabel"),
   cityInput: document.querySelector("#cityInput"),
   countryInput: document.querySelector("#countryInput"),
+  madhabSelect: document.querySelector("#madhabSelect"),
   refreshButton: document.querySelector("#refreshButton"),
   locationButton: document.querySelector("#locationButton"),
   saveLocationButton: document.querySelector("#saveLocationButton"),
@@ -70,7 +71,7 @@ function formatDate(date) {
 function buildPrayerUrl() {
   const params = new URLSearchParams({
     method: String(METHOD_ID),
-    school: String(SCHOOL_ID)
+    school: String(state.school)
   });
   const datedPath = formatDate(new Date());
 
@@ -118,6 +119,7 @@ function renderPrayerTimes() {
   elements.locationLabel.textContent = `${state.location.city}, ${state.location.country}`;
   elements.cityInput.value = state.location.city;
   elements.countryInput.value = state.location.country;
+  elements.madhabSelect.value = String(state.school);
 
   if (!state.timings || !state.nextPrayer) {
     elements.prayerList.innerHTML = "";
@@ -206,12 +208,20 @@ async function useDeviceLocation() {
 function saveManualLocation() {
   state.location.city = elements.cityInput.value.trim() || "Tokyo";
   state.location.country = elements.countryInput.value.trim() || "Japan";
+  state.school = Number(elements.madhabSelect.value);
   state.location.latitude = null;
   state.location.longitude = null;
   localStorage.setItem("miswaak.city", state.location.city);
   localStorage.setItem("miswaak.country", state.location.country);
+  localStorage.setItem("miswaak.school", String(state.school));
   localStorage.removeItem("miswaak.latitude");
   localStorage.removeItem("miswaak.longitude");
+  refreshPrayerTimes();
+}
+
+function saveMadhab() {
+  state.school = Number(elements.madhabSelect.value);
+  localStorage.setItem("miswaak.school", String(state.school));
   refreshPrayerTimes();
 }
 
@@ -304,6 +314,7 @@ function bindEvents() {
   elements.refreshButton.addEventListener("click", refreshPrayerTimes);
   elements.locationButton.addEventListener("click", useDeviceLocation);
   elements.saveLocationButton.addEventListener("click", saveManualLocation);
+  elements.madhabSelect.addEventListener("change", saveMadhab);
   elements.testAzaanButton.addEventListener("click", toggleAzaan);
   elements.azaanAudio.addEventListener("ended", () => setAzaanPlaying(false));
   elements.azaanAudio.addEventListener("pause", () => {

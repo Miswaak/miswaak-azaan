@@ -1,6 +1,6 @@
 {
   "name": "miswaak-azaan-mobile",
-  "version": "1.0.0",
+  "version": "1.0.1-beta",
   "private": true,
   "description": "Android-first mobile app shell for Miswaak Azaan.",
   "scripts": {

@@ -25,7 +25,8 @@ body {
 }
 
 button,
-input {
+input,
+select {
   font: inherit;
 }
 
@@ -248,7 +249,8 @@ input {
   font-weight: 700;
 }
 
-.settings-panel input {
+.settings-panel input,
+.settings-panel select {
   width: 100%;
   min-height: 44px;
   border: 1px solid var(--line);
