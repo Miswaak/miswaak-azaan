@@ -9,7 +9,7 @@ const PRAYERS = [
 
 const METHOD_ID = 3;
 const APP_PLATFORM = "android";
-const APP_VERSION_CODE = 6;
+const APP_VERSION_CODE = 7;
 const UPDATE_MANIFEST_URL = "https://miswaak.github.io/miswaak-azaan/downloads/latest.json";
 const TEST_AZAAN_PRAYER = "dhuhr";
 const AUDIO_BY_PRAYER = {
@@ -19,6 +19,10 @@ const AUDIO_BY_PRAYER = {
 const NOTIFICATION_SOUND_BY_PRAYER = {
   fajr: "rayhan_azaan_fajr.m4a",
   default: "rayhan_azaan_all4.m4a"
+};
+const NOTIFICATION_CHANNEL_BY_PRAYER = {
+  fajr: "miswaak-azaan-fajr-v2",
+  default: "miswaak-azaan-all4-v2"
 };
 const KAABA = {
   latitude: 21.422487,
@@ -323,6 +327,33 @@ function getNotificationSound(prayerKey = "default") {
   return prayerKey === "fajr" ? NOTIFICATION_SOUND_BY_PRAYER.fajr : NOTIFICATION_SOUND_BY_PRAYER.default;
 }
 
+function getNotificationChannelId(prayerKey = "default") {
+  return prayerKey === "fajr" ? NOTIFICATION_CHANNEL_BY_PRAYER.fajr : NOTIFICATION_CHANNEL_BY_PRAYER.default;
+}
+
+async function ensureAzaanNotificationChannels(notifications) {
+  await Promise.all([
+    notifications.createChannel({
+      id: NOTIFICATION_CHANNEL_BY_PRAYER.fajr,
+      name: "Fajr Azaan",
+      description: "Dedicated Fajr azaan voice.",
+      importance: 5,
+      visibility: 1,
+      sound: NOTIFICATION_SOUND_BY_PRAYER.fajr,
+      vibration: true
+    }),
+    notifications.createChannel({
+      id: NOTIFICATION_CHANNEL_BY_PRAYER.default,
+      name: "Azaan",
+      description: "Azaan voice for Dhuhr, Asr, Maghrib, and Isha.",
+      importance: 5,
+      visibility: 1,
+      sound: NOTIFICATION_SOUND_BY_PRAYER.default,
+      vibration: true
+    })
+  ]);
+}
+
 async function checkForUpdates() {
   try {
     const response = await fetch(`${UPDATE_MANIFEST_URL}?t=${Date.now()}`, { cache: "no-store" });
@@ -367,6 +398,8 @@ async function scheduleNextPrayerNotification() {
     return;
   }
 
+  await ensureAzaanNotificationChannels(notifications);
+
   await notifications.cancel({ notifications: [{ id: 1001 }] });
   await notifications.schedule({
     notifications: [{
@@ -374,7 +407,8 @@ async function scheduleNextPrayerNotification() {
       title: `${state.nextPrayer.label} Azaan`,
       body: "Miswaak Azaan",
       schedule: { at: state.nextPrayer.at },
-      sound: getNotificationSound(state.nextPrayer.key)
+      sound: getNotificationSound(state.nextPrayer.key),
+      channelId: getNotificationChannelId(state.nextPrayer.key)
     }]
   });
 }
