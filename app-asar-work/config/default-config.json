@@ -1,0 +1,21 @@
+{
+    "location":  {
+                     "city":  "Tokyo",
+                     "country":  "Japan",
+                     "latitude":  35.6762,
+                     "longitude":  139.6503,
+                     "timezone":  "Asia/Tokyo",
+                     "source":  "default"
+                 },
+    "prayer":  {
+                   "calculationMethod":  "MuslimWorldLeague",
+                   "madhab":  "Shafi",
+                   "useApiFirst":  true,
+                   "apiTimeoutMs":  8000
+               },
+    "app":  {
+                "refreshMinutes":  30,
+                "logLevel":  "info",
+                "autoDetectOnFirstRun":  true
+            }
+}

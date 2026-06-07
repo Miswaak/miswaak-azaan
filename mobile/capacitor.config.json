@@ -9,7 +9,7 @@
     "LocalNotifications": {
       "smallIcon": "ic_stat_miswaak_azaan",
       "iconColor": "#0f7a53",
-      "sound": "rayhan_azaan.m4a"
+      "sound": "rayhan_azaan_all4.m4a"
     }
   }
 }

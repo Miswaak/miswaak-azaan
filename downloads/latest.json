@@ -1,13 +1,13 @@
 {
   "windows": {
-    "versionName": "1.0.2",
-    "versionCode": 102,
-    "url": "https://miswaak.github.io/miswaak-azaan/downloads/Miswaak.Azaan.Setup.1.0.2.exe"
+    "versionName": "1.0.3",
+    "versionCode": 103,
+    "url": "https://miswaak.github.io/miswaak-azaan/downloads/Miswaak.Azaan.Setup.1.0.3.exe"
   },
   "android": {
-    "versionName": "1.0.4-beta",
-    "versionCode": 5,
-    "url": "https://miswaak.github.io/miswaak-azaan/downloads/Miswaak.Azaan.Android.1.0.4-beta.apk",
+    "versionName": "1.0.5-beta",
+    "versionCode": 6,
+    "url": "https://miswaak.github.io/miswaak-azaan/downloads/Miswaak.Azaan.Android.1.0.5-beta.apk",
     "playStoreUrl": ""
   }
 }

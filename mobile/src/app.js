@@ -9,8 +9,17 @@ const PRAYERS = [
 
 const METHOD_ID = 3;
 const APP_PLATFORM = "android";
-const APP_VERSION_CODE = 5;
+const APP_VERSION_CODE = 6;
 const UPDATE_MANIFEST_URL = "https://miswaak.github.io/miswaak-azaan/downloads/latest.json";
+const TEST_AZAAN_PRAYER = "dhuhr";
+const AUDIO_BY_PRAYER = {
+  fajr: new URL("./assets/rayhan-azaan-fajr.m4a", import.meta.url).href,
+  default: new URL("./assets/rayhan-azaan-all4.m4a", import.meta.url).href
+};
+const NOTIFICATION_SOUND_BY_PRAYER = {
+  fajr: "rayhan_azaan_fajr.m4a",
+  default: "rayhan_azaan_all4.m4a"
+};
 const KAABA = {
   latitude: 21.422487,
   longitude: 39.826206
@@ -277,6 +286,7 @@ function saveMadhab() {
 }
 
 async function playAzaan() {
+  elements.azaanAudio.src = getAzaanAudioSrc(TEST_AZAAN_PRAYER);
   elements.azaanAudio.pause();
   elements.azaanAudio.currentTime = 0;
   await elements.azaanAudio.play();
@@ -303,6 +313,14 @@ function toggleAzaan() {
 
 function resolveUpdateUrl(release) {
   return release.playStoreUrl || release.url || release.downloadUrl || null;
+}
+
+function getAzaanAudioSrc(prayerKey = "default") {
+  return prayerKey === "fajr" ? AUDIO_BY_PRAYER.fajr : AUDIO_BY_PRAYER.default;
+}
+
+function getNotificationSound(prayerKey = "default") {
+  return prayerKey === "fajr" ? NOTIFICATION_SOUND_BY_PRAYER.fajr : NOTIFICATION_SOUND_BY_PRAYER.default;
 }
 
 async function checkForUpdates() {
@@ -356,7 +374,7 @@ async function scheduleNextPrayerNotification() {
       title: `${state.nextPrayer.label} Azaan`,
       body: "Miswaak Azaan",
       schedule: { at: state.nextPrayer.at },
-      sound: "rayhan_azaan.m4a"
+      sound: getNotificationSound(state.nextPrayer.key)
     }]
   });
 }
