@@ -1,3 +1,5 @@
+import { CalculationMethod, Coordinates, Madhab, PrayerTimes } from "adhan";
+
 const PRAYERS = [
   ["fajr", "Fajr"],
   ["sunrise", "Sunrise"],
@@ -9,8 +11,9 @@ const PRAYERS = [
 
 const METHOD_ID = 3;
 const APP_PLATFORM = "android";
-const APP_VERSION_CODE = 7;
+const APP_VERSION_CODE = 8;
 const UPDATE_MANIFEST_URL = "https://miswaak.github.io/miswaak-azaan/downloads/latest.json";
+const SCHEDULE_CACHE_KEY = "miswaak.prayerSchedule";
 const TEST_AZAAN_PRAYER = "dhuhr";
 const AUDIO_BY_PRAYER = {
   fajr: new URL("./assets/rayhan-azaan-fajr.m4a", import.meta.url).href,
@@ -148,6 +151,73 @@ function buildPrayerUrl() {
   return `https://api.aladhan.com/v1/timingsByCity/${datedPath}?${params.toString()}`;
 }
 
+function getScheduleCacheKey() {
+  return [
+    formatDate(new Date()),
+    state.location.city,
+    state.location.country,
+    Number.isFinite(state.location.latitude) ? state.location.latitude.toFixed(4) : "no-lat",
+    Number.isFinite(state.location.longitude) ? state.location.longitude.toFixed(4) : "no-lon",
+    state.school
+  ].join("|");
+}
+
+function saveScheduleCache(timings) {
+  localStorage.setItem(SCHEDULE_CACHE_KEY, JSON.stringify({
+    key: getScheduleCacheKey(),
+    timings,
+    savedAt: new Date().toISOString()
+  }));
+}
+
+function loadCachedSchedule() {
+  try {
+    const cached = JSON.parse(localStorage.getItem(SCHEDULE_CACHE_KEY) || "null");
+    if (cached?.key === getScheduleCacheKey() && cached.timings) {
+      return cached.timings;
+    }
+  } catch (_) {
+    localStorage.removeItem(SCHEDULE_CACHE_KEY);
+  }
+  return null;
+}
+
+function getOfflineCalculationParams() {
+  const params = CalculationMethod.MuslimWorldLeague();
+  params.madhab = state.school === 1 ? Madhab.Hanafi : Madhab.Shafi;
+  return params;
+}
+
+function formatPrayerDate(date) {
+  return new Intl.DateTimeFormat("en-GB", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false
+  }).format(date);
+}
+
+function calculateOfflinePrayerTimes() {
+  const { latitude, longitude } = state.location;
+  if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) {
+    throw new Error("Offline prayer times need saved GPS coordinates. Use Location once while GPS is available.");
+  }
+
+  const prayerTimes = new PrayerTimes(
+    new Coordinates(latitude, longitude),
+    new Date(),
+    getOfflineCalculationParams()
+  );
+
+  return {
+    fajr: formatPrayerDate(prayerTimes.fajr),
+    sunrise: formatPrayerDate(prayerTimes.sunrise),
+    dhuhr: formatPrayerDate(prayerTimes.dhuhr),
+    asr: formatPrayerDate(prayerTimes.asr),
+    maghrib: formatPrayerDate(prayerTimes.maghrib),
+    isha: formatPrayerDate(prayerTimes.isha)
+  };
+}
+
 function parsePrayerTime(value) {
   const [hour, minute] = value.split(":").map(Number);
   const date = new Date();
@@ -213,29 +283,38 @@ function updateCountdown() {
 
 async function fetchPrayerTimes() {
   setStatus("Refreshing");
-  const response = await fetch(buildPrayerUrl());
-  if (!response.ok) {
-    throw new Error(`Prayer time request failed: HTTP ${response.status}`);
-  }
+  let offline = false;
+  try {
+    const response = await fetch(buildPrayerUrl());
+    if (!response.ok) {
+      throw new Error(`Prayer time request failed: HTTP ${response.status}`);
+    }
 
-  const payload = await response.json();
-  if (payload.code !== 200 || !payload.data?.timings) {
-    throw new Error("Prayer time response was not valid.");
-  }
+    const payload = await response.json();
+    if (payload.code !== 200 || !payload.data?.timings) {
+      throw new Error("Prayer time response was not valid.");
+    }
 
-  const timings = payload.data.timings;
-  state.timings = {
-    fajr: stripTimeZoneSuffix(timings.Fajr),
-    sunrise: stripTimeZoneSuffix(timings.Sunrise),
-    dhuhr: stripTimeZoneSuffix(timings.Dhuhr),
-    asr: stripTimeZoneSuffix(timings.Asr),
-    maghrib: stripTimeZoneSuffix(timings.Maghrib),
-    isha: stripTimeZoneSuffix(timings.Isha)
-  };
+    const timings = payload.data.timings;
+    state.timings = {
+      fajr: stripTimeZoneSuffix(timings.Fajr),
+      sunrise: stripTimeZoneSuffix(timings.Sunrise),
+      dhuhr: stripTimeZoneSuffix(timings.Dhuhr),
+      asr: stripTimeZoneSuffix(timings.Asr),
+      maghrib: stripTimeZoneSuffix(timings.Maghrib),
+      isha: stripTimeZoneSuffix(timings.Isha)
+    };
+    saveScheduleCache(state.timings);
+  } catch (_) {
+    offline = true;
+    const cachedTimings = loadCachedSchedule();
+    state.timings = cachedTimings || calculateOfflinePrayerTimes();
+    saveScheduleCache(state.timings);
+  }
   state.nextPrayer = getNextPrayer(state.timings);
   renderPrayerTimes();
   scheduleNextPrayerNotification();
-  setStatus("Ready");
+  setStatus(offline ? "Offline: prayer times ready" : "Ready");
 }
 
 async function refreshPrayerTimes() {
