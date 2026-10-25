@@ -10,7 +10,7 @@ app.commandLine.appendSwitch("autoplay-policy", "no-user-gesture-required");
 
 const UPDATE_MANIFEST_URL = "https://miswaak.github.io/miswaak-azaan/downloads/latest.json";
 const APP_PLATFORM = "windows";
-const APP_VERSION_CODE = 103;
+const APP_VERSION_CODE = 104;
 const AUDIO_BY_PRAYER = {
   fajr: "rayhan-azaan-fajr.m4a",
   default: "rayhan-azaan-all4.m4a"

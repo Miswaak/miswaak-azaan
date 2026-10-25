@@ -3,6 +3,7 @@ const PRAYERS = [
   ["sunrise", "Sunrise"],
   ["dhuhr", "Dhuhr"],
   ["asr", "Asr"],
+  ["sunset", "Sunset"],
   ["maghrib", "Maghrib"],
   ["isha", "Isha"]
 ];
@@ -12,6 +13,7 @@ const TEST_AZAAN_PRAYER = "dhuhr";
 const state = {
   config: null,
   prayerData: null,
+  scheduleDate: null,
   refreshTimer: null,
   clockTimer: null,
   azaanAudioByPrayer: new Map(),
@@ -23,6 +25,7 @@ const state = {
 const elements = {
   sourceLabel: document.querySelector("#sourceLabel"),
   locationTitle: document.querySelector("#locationTitle"),
+  countdownLabel: document.querySelector("#countdownLabel"),
   nextPrayer: document.querySelector("#nextPrayer"),
   nextPrayerTime: document.querySelector("#nextPrayerTime"),
   azaanStatusLabel: document.querySelector("#azaanStatusLabel"),
@@ -96,6 +99,7 @@ function formatPrayerStatus() {
 
 function renderPrayerTimes(data) {
   state.prayerData = data;
+  state.scheduleDate = getLocationDateParts().dateKey;
   const { location, timings, nextPrayer } = data;
   elements.sourceLabel.textContent = 'Prayer schedule';
   elements.locationTitle.textContent = `${location.city}, ${location.country}`;
@@ -108,10 +112,11 @@ function renderPrayerTimes(data) {
 
   elements.timesGrid.innerHTML = PRAYERS.map(([key, label]) => {
     const active = key === nextPrayer.key ? " active" : "";
-    return `<article class="time-card${active}"><span>${label}</span><strong>${timings[key]}</strong></article>`;
+    return `<article class="time-card${active}"><span>${label}${AZAAN_PRAYERS.has(key) ? "" : " (time only)"}</span><strong>${timings[key] || "--:--"}</strong></article>`;
   }).join("");
 
   showStatus(data.warning ? `API fallback: ${data.warning}` : "");
+  updateCountdown();
   checkPrayerTriggers();
 }
 
@@ -183,9 +188,34 @@ function startClockAndPrayerScheduler() {
 }
 
 function updateClockAndScheduler() {
-  const { displayTime } = getLocationDateParts();
+  const { dateKey, displayTime } = getLocationDateParts();
+  if (state.scheduleDate && state.scheduleDate !== dateKey) {
+    state.scheduleDate = dateKey;
+    loadPrayerTimes();
+  }
   elements.currentTimeLabel.textContent = displayTime;
+  updateCountdown();
   checkPrayerTriggers();
+}
+
+function updateCountdown() {
+  if (!state.prayerData?.timings) return;
+  const { displayTime } = getLocationDateParts();
+  const seconds = value => value.split(":").reduce((sum, part, index) => sum + Number(part) * [3600, 60, 1][index], 0);
+  const now = seconds(displayTime);
+  const prayers = PRAYERS.filter(([key]) => AZAAN_PRAYERS.has(key));
+  let next = prayers.find(([key]) => seconds(state.prayerData.timings[key]) > now);
+  const tomorrow = !next;
+  next ||= prayers[0];
+  const [key, label] = next;
+  const time = state.prayerData.timings[key];
+  const remaining = seconds(time) + (tomorrow ? 86400 : 0) - now;
+  state.prayerData.nextPrayer = { key, label, time, tomorrow };
+  elements.nextPrayer.textContent = label;
+  elements.nextPrayerTime.textContent = `${time}${tomorrow ? " tomorrow" : ""}`;
+  elements.countdownLabel.textContent = [Math.floor(remaining / 3600), Math.floor(remaining % 3600 / 60), remaining % 60].map(n => String(n).padStart(2, "0")).join(":");
+  if (!state.isAzaanPlaying) elements.azaanStatusLabel.textContent = formatPrayerStatus();
+  elements.timesGrid.querySelectorAll(".time-card").forEach((card, index) => card.classList.toggle("active", PRAYERS[index][0] === key));
 }
 
 async function loadConfig() {

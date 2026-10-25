@@ -3,7 +3,6 @@ const { calculateOfflinePrayerTimes } = require("./offlineCalculator");
 
 const PRAYER_LABELS = {
   fajr: "Fajr",
-  sunrise: "Sunrise",
   dhuhr: "Dhuhr",
   asr: "Asr",
   maghrib: "Maghrib",

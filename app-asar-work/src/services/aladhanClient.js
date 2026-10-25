@@ -77,6 +77,7 @@ async function fetchPrayerTimesFromAladhan(config, date, logger) {
       timings: {
         fajr: stripTimeZoneSuffix(timings.Fajr),
         sunrise: stripTimeZoneSuffix(timings.Sunrise),
+        sunset: stripTimeZoneSuffix(timings.Sunset),
         dhuhr: stripTimeZoneSuffix(timings.Dhuhr),
         asr: stripTimeZoneSuffix(timings.Asr),
         maghrib: stripTimeZoneSuffix(timings.Maghrib),

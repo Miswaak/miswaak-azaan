@@ -14,7 +14,7 @@ const METHOD_FACTORIES = {
   NorthAmerica: () => adhan.CalculationMethod.NorthAmerica()
 };
 
-const PRAYERS = ["fajr", "sunrise", "dhuhr", "asr", "maghrib", "isha"];
+const PRAYERS = ["fajr", "sunrise", "sunset", "dhuhr", "asr", "maghrib", "isha"];
 
 function formatInTimeZone(date, timezone) {
   return new Intl.DateTimeFormat("en-GB", {

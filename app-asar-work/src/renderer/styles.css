@@ -472,3 +472,31 @@ button:focus-visible {
     flex: 1 1 160px;
   }
 }
+
+.prayer-countdown {
+  width: min(100%, 220px);
+  aspect-ratio: 1;
+  border: 7px solid #0f7a53;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 16px auto;
+  color: #0b5f41;
+  background: #e7f2ec;
+  flex-shrink: 0;
+}
+.prayer-countdown span { font-size: 13px; text-align: center; }
+.prayer-countdown strong { font-size: clamp(26px, 5vw, 36px); font-variant-numeric: tabular-nums; }
+.prayer-row small { display: block; font-size: 11px; font-weight: 400; color: var(--muted); }
+@media (max-width: 600px) {
+  .next-prayer { flex-wrap: wrap; justify-content: center; text-align: center; }
+  .focus-panel { display: flex; flex-direction: column; }
+}
+
+@media (min-width: 901px) { .focus-panel { grid-template-columns: minmax(150px, .8fr) 220px minmax(180px, 1fr); } }
+
+.focus-panel .meta-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.focus-panel .meta-grid strong { overflow-wrap: anywhere; }

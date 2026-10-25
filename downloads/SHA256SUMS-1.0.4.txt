@@ -1,0 +1,2 @@
+76d4276943ed71f4b9c43a24b0dbe701a47d42afbf2189b63514234a29114fe2  Miswaak.Azaan.Setup.1.0.4.exe
+9541732afbc2fd7295bf0d58d1ec75725a91fd2bd3f4ae63acd682d5711f0666  Miswaak.Azaan.Android.1.0.8-beta.apk

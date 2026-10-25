@@ -1,3 +1,5 @@
+import { Capacitor } from "@capacitor/core";
+import { LocalNotifications } from "@capacitor/local-notifications";
 import { CalculationMethod, Coordinates, Madhab, PrayerTimes } from "adhan";
 
 const PRAYERS = [
@@ -5,13 +7,16 @@ const PRAYERS = [
   ["sunrise", "Sunrise"],
   ["dhuhr", "Dhuhr"],
   ["asr", "Asr"],
+  ["sunset", "Sunset"],
   ["maghrib", "Maghrib"],
   ["isha", "Isha"]
 ];
 
+const AZAAN_PRAYERS = new Set(["fajr", "dhuhr", "asr", "maghrib", "isha"]);
+const NOTIFICATION_ID_BY_PRAYER = { fajr: 1101, dhuhr: 1102, asr: 1103, maghrib: 1104, isha: 1105 };
 const METHOD_ID = 3;
 const APP_PLATFORM = "android";
-const APP_VERSION_CODE = 8;
+const APP_VERSION_CODE = 9;
 const UPDATE_MANIFEST_URL = "https://miswaak.github.io/miswaak-azaan/downloads/latest.json";
 const SCHEDULE_CACHE_KEY = "miswaak.prayerSchedule";
 const TEST_AZAAN_PRAYER = "dhuhr";
@@ -33,6 +38,8 @@ const KAABA = {
 };
 
 const state = {
+  scheduleDate: null,
+  legacyNotificationsCleared: false,
   timings: null,
   nextPrayer: null,
   location: {
@@ -211,6 +218,7 @@ function calculateOfflinePrayerTimes() {
   return {
     fajr: formatPrayerDate(prayerTimes.fajr),
     sunrise: formatPrayerDate(prayerTimes.sunrise),
+    sunset: formatPrayerDate(prayerTimes.sunset),
     dhuhr: formatPrayerDate(prayerTimes.dhuhr),
     asr: formatPrayerDate(prayerTimes.asr),
     maghrib: formatPrayerDate(prayerTimes.maghrib),
@@ -228,6 +236,7 @@ function parsePrayerTime(value) {
 function getNextPrayer(timings) {
   const now = new Date();
   for (const [key, label] of PRAYERS) {
+    if (!AZAAN_PRAYERS.has(key)) continue;
     const at = parsePrayerTime(timings[key]);
     if (at > now) {
       return { key, label, time: timings[key], at };
@@ -267,15 +276,25 @@ function renderPrayerTimes() {
 
   elements.prayerList.innerHTML = PRAYERS.map(([key, label]) => {
     const nextClass = key === state.nextPrayer.key ? " is-next" : "";
-    return `<div class="prayer-row${nextClass}"><strong>${label}</strong><span>${state.timings[key]}</span></div>`;
+    return `<div class="prayer-row${nextClass}"><strong>${label}${AZAAN_PRAYERS.has(key) ? "" : " <small>Time only</small>"}</strong><span>${state.timings[key] || "--:--"}</span></div>`;
   }).join("");
 
   updateCountdown();
 }
 
 function updateCountdown() {
+  if (state.scheduleDate && state.scheduleDate !== formatDate(new Date())) {
+    state.scheduleDate = formatDate(new Date());
+    refreshPrayerTimes();
+  }
   if (!state.nextPrayer) {
     elements.countdownLabel.textContent = "--";
+    return;
+  }
+  if (state.nextPrayer.at.getTime() <= Date.now()) {
+    state.nextPrayer = getNextPrayer(state.timings);
+    renderPrayerTimes();
+    scheduleNextPrayerNotification().catch(error => setStatus(error.message, true));
     return;
   }
   elements.countdownLabel.textContent = formatDuration(state.nextPrayer.at.getTime() - Date.now());
@@ -299,6 +318,7 @@ async function fetchPrayerTimes() {
     state.timings = {
       fajr: stripTimeZoneSuffix(timings.Fajr),
       sunrise: stripTimeZoneSuffix(timings.Sunrise),
+      sunset: stripTimeZoneSuffix(timings.Sunset),
       dhuhr: stripTimeZoneSuffix(timings.Dhuhr),
       asr: stripTimeZoneSuffix(timings.Asr),
       maghrib: stripTimeZoneSuffix(timings.Maghrib),
@@ -311,9 +331,10 @@ async function fetchPrayerTimes() {
     state.timings = cachedTimings || calculateOfflinePrayerTimes();
     saveScheduleCache(state.timings);
   }
+  state.scheduleDate = formatDate(new Date());
   state.nextPrayer = getNextPrayer(state.timings);
   renderPrayerTimes();
-  scheduleNextPrayerNotification();
+  await scheduleNextPrayerNotification();
   setStatus(offline ? "Offline: prayer times ready" : "Ready");
 }
 
@@ -462,16 +483,21 @@ async function checkForUpdates() {
 }
 
 async function scheduleNextPrayerNotification() {
-  if (!state.nextPrayer) {
+  if (!state.nextPrayer || !AZAAN_PRAYERS.has(state.nextPrayer.key)) {
     return;
   }
 
-  const capacitor = window.Capacitor;
-  const notifications = window.Capacitor?.Plugins?.LocalNotifications;
-  if (!capacitor || !notifications) {
+  const notifications = LocalNotifications;
+  if (!Capacitor.isNativePlatform()) {
     return;
   }
 
+  // Clear older sunrise alarms once; preserve a prayer alert that is currently sounding.
+  if (!state.legacyNotificationsCleared) {
+    await notifications.cancel({ notifications: [{ id: 1001 }] });
+    await notifications.removeDeliveredNotifications({ notifications: [{ id: 1001 }] });
+    state.legacyNotificationsCleared = true;
+  }
   const permission = await notifications.requestPermissions();
   if (permission.display !== "granted") {
     return;
@@ -479,10 +505,11 @@ async function scheduleNextPrayerNotification() {
 
   await ensureAzaanNotificationChannels(notifications);
 
-  await notifications.cancel({ notifications: [{ id: 1001 }] });
+  const notificationId = NOTIFICATION_ID_BY_PRAYER[state.nextPrayer.key];
+  await notifications.cancel({ notifications: [{ id: notificationId }] });
   await notifications.schedule({
     notifications: [{
-      id: 1001,
+      id: notificationId,
       title: `${state.nextPrayer.label} Azaan`,
       body: "Miswaak Azaan",
       schedule: { at: state.nextPrayer.at },
@@ -505,6 +532,9 @@ function bindEvents() {
     }
   });
 
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden) refreshPrayerTimes();
+  });
   state.countdownTimer = setInterval(updateCountdown, 1000);
 }
 

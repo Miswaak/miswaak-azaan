@@ -1,6 +1,6 @@
 {
   "name": "miswaak-azaan",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Production-ready desktop prayer time app with Aladhan API and adhan offline fallback.",
   "main": "src/main/main.js",
   "author": "Rayhan",
@@ -11,7 +11,7 @@
     "productName": "Miswaak Azaan",
     "electronVersion": "30.5.1",
     "directories": {
-      "output": "../release-voice-icon-1.0.3"
+      "output": "../release-work/windows"
     },
     "files": [
       "src/**/*",
